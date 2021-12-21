@@ -10,7 +10,8 @@ Can be expanded on other FMI Endpoints and made more dynamic.
 * Change weather.ini to match your database configuration
 * Create logfile weather.log in /log
 * Change $desiredlocation to your desiredlocation
-* Add FetchFMIWeather.php to Cron to fetch new weather every hour.
+* run "php FetchFMIWeather.php" to check this actually works
+* Add a CronJob "php FetchFMIWeather.php" to fetch new weather every hour.
 
 
 ### Check that everything works (Absolutely no guarantees at this point)

@@ -1,0 +1,16 @@
+; Rename this file to weather.ini and make changes to fit your environment
+
+[application]
+
+; Output warning and errors directly to browser
+
+devmode = off
+
+; Log is written to this file
+logfile = "/log/weather.log"
+
+
+; Connect to database
+db.username = ""
+db.password = ""
+db.dsn = "mysql:host=;dbname="

@@ -50,12 +50,12 @@ Returns latest forecast from FMI for input location
 
 ### forecastForLocationFromDatabase
 * &location=Arabianranta
-* Location must be single word (City, district) check saved location with getAllForecastLocations
+* Location must be single word (City, district) check saved location with savedForecastLocations
 Returns all Forecast data for location from database
 
 ### observationsForLocationFromDatabase
 * $location=Helsinki Kumpula
-* Location name may vary check saved locations with getAllObservationLocations
+* Location name may vary check saved locations with savedObservationLocations
 
 Returns all observations for location from database
 

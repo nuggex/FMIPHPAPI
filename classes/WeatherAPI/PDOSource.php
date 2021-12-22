@@ -54,7 +54,7 @@ class PDOSource implements Source
      * Ever.
      */
 
-    public function getAllForcastData()
+    public function getAllForecastData()
     {
         $s = $this->pdo->prepare("SELECT * FROM forecasts");
         $s->execute();
@@ -148,6 +148,15 @@ class PDOSource implements Source
             ":WAWA_PT1H_RANK" => $data['WAWA_PT1H_RANK']
         ));
         return $s->rowCount();
+    }
+
+    public function getObservationsForLocation($location)
+    {
+        $s = $this->pdo->prepare("SELECT * FROM observations WHERE location=:location");
+        $s->execute(array(
+            ":location" => $location
+        ));
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 }

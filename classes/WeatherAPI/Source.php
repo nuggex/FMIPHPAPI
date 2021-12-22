@@ -8,11 +8,9 @@ interface Source
 
     public function getLatestWeather($location);
 
-    //public function insertWeatherData();
+    public function getAllForecastData();
 
-    //public function clearWeatherData();
-
-    //public function getAllWeatherData();
+    public function getAllObservationData();
 
     function insertObservations($data);
 
@@ -23,6 +21,8 @@ interface Source
     public function getObservationLocations();
 
     public function getForecastForLocation($location);
+
+    public function getObservationsForLocation($location);
 
 
 }

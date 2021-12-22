@@ -20,6 +20,11 @@ class WeatherAPI
         return $this->source->getLatestWeather($location);
     }
 
+    public function getObservationsForLocation($location)
+    {
+        return $this->source->getObservationsForLocation($location);
+    }
+
     public function getForecastLocations()
     {
         return $this->source->getForecastLocations();
@@ -35,11 +40,14 @@ class WeatherAPI
         return $this->source->getForecastForLocation($location);
     }
 
-
-    public function getAllWeatherData()
+    public function getAllForecastData()
     {
-        return $this->source->getAllWeatherData();
+       return $this->source->getAllForecastData();
+    }
 
+    public function getAllObservationData()
+    {
+        return $this->source->GetAllObservationData();
     }
 
     private function insertObservations($data)
@@ -163,4 +171,116 @@ class WeatherAPI
         return $output;
     }
 
+    public function getAllForecastDataForLocation($location)
+    {
+        $weatherData = $this->getForecastForLocation($location);
+        $weatherData = $this->unixTimeToDateFormat($weatherData);
+        return json_encode($weatherData);
+    }
+
+    public function getAllObservationsForLocation($location)
+    {
+        $weatherData = $this->getObservationsForLocation($location);
+        $weatherData = $this->unixTimeToDateFormat($weatherData);
+        return json_encode($weatherData);
+    }
+
+    public function getCurrentWeatherForLocation($location)
+    {
+
+        $weatherData = $this->parseWeatherData($this->fetchWeather($location));
+
+
+        // Make weather Data more readable and jsonify
+
+        return $this->makeObservationReadable(end($weatherData));
+
+    }
+
+    public function getForecastForCurrentLocation($location)
+    {
+
+        $weatherData = $this->parseWeatherData($this->fetchForeCast($location));
+        $weatherData = $this->unixTimeToDateFormat($weatherData);
+        return json_encode($weatherData);
+    }
+
+    private function unixTimeToDateFormat($weatherData): array
+    {
+
+        foreach ($weatherData as $key => $entry) {
+            foreach ($entry as $wdkey => $wd) {
+                if ($wdkey == "timeStamp") {
+                    $weatherData[$key][$wdkey] = date("Y-m-d\TH:i:s", $wd);
+                }
+            }
+        }
+        return $weatherData;
+    }
+
+
+    public function test_input($data): string
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        return htmlspecialchars($data);
+    }
+
+
+    /*
+     * Translates one observation object to a more human readable json format
+     * $observation is ONE observation object
+     */
+    private function makeObservationReadable($observation)
+    {
+        $latestWeather = [];
+        foreach ($observation as $key => $wd) {
+
+            switch ($key) {
+                case "timeStamp":
+                    $latestWeather['timeStamp'] = date("Y-m-d\TH:i:s", $wd);
+                    break;
+                case "location":
+                    $latestWeather['location'] = $wd;
+                    break;
+                case "TA_PT1H_AVG":
+                    $latestWeather['Temperature_1H_Average'] = $wd;
+                    break;
+                case "TA_PT1H_MAX":
+                    $latestWeather['Temperature_1H_Max'] = $wd;
+                    break;
+                case "TA_PT1H_MIN":
+                    $latestWeather['Temperature_1H_Min'] = $wd;
+                    break;
+                case "RH_PT1H_AVG":
+                    $latestWeather['RelativeHumidity_1H_Average'] = $wd;
+                    break;
+                case "WS_PT1H_AVG":
+                    $latestWeather['WindSpeed_1H_Average'] = $wd;
+                    break;
+                case "WS_PT1H_MAX":
+                    $latestWeather['WindSpeed_1H_Max'] = $wd;
+                    break;
+                case "WS_PT1H_MIN":
+                    $latestWeather['WindSpeed_1H_Min'] = $wd;
+                    break;
+                case "WD_PT1H_AVG":
+                    $latestWeather['WindDirection_1H_Min'] = $wd;
+                    break;
+                case "PRA_PT1H_ACC":
+                    $latestWeather['Precipitation_1H_Amount'] = $wd;
+                    break;
+                case "PRI_PT1H_MAX":
+                    $latestWeather['Precipitation_Intensity_Max'] = $wd;
+                    break;
+                case "PA_PT1H_AVG":
+                    $latestWeather['Air_Pressure_1H_Average'] = $wd;
+                    break;
+                case "WAWA_PT1H_RANK":
+                    $latestWeather['Present_Weather_Auto'] = $wd;
+                    break;
+            }
+        }
+        return json_encode($latestWeather);
+    }
 }

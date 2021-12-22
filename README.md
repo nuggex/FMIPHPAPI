@@ -19,6 +19,46 @@ Can be expanded on other FMI Endpoints and made more dynamic.
 * run   php GetWeather.php "location=*Your Set Location*"
 
 
+## Endpoints
+
+* webroot/api.php?endpointName&param
+* All endpoints returns data in json encoded format unless otherwise specified
+
+### savedForecastLocations
+Returns all in database present forecast locations
+
+### savedObservationLocations
+Returns all in database prsesent observation locations
+
+### getAllObservations
+Returns ALL saved observations 
+
+### getAllForecasts
+Returns ALL saved forecasts
+
+### currentWeather 
+* &location=Arabianranta
+* Location must be single word (City,district)
+Response includes weather station location as name i.e. "Helsinki Kaisaniemi". Geographical location is not included.
+
+Returns latest reported weather from FMI.
+
+### foreCastForLocation
+* &location=Arabianranta
+* Location must be single word (City,district)
+Returns latest forecast from FMI for input location
+
+### forecastForLocationFromDatabase
+* &location=Arabianranta
+* Location must be single word (City, district) check saved location with getAllForecastLocations
+Returns all Forecast data for location from database
+
+### observationsForLocationFromDatabase
+* $location=Helsinki Kumpula
+* Location name may vary check saved locations with getAllObservationLocations
+
+Returns all observations for location from database
+
 ## NOTE
 Locations in Observartions and Forecasts are NOT the same unless you make them so. 
 

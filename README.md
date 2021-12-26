@@ -4,6 +4,11 @@ PHP API For Finnish Meteorological Institute Open Data
 XML Interpreter for FMI Open Data written in PHP. 
 Can be expanded on other FMI Endpoints and made more dynamic. 
 
+## Requirements (Dev environment)
+
+* PHP >7.3 
+* MariaDB >10
+
 
 ## Setup
 * Create a database according to docs/weatherdata.sql

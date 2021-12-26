@@ -19,7 +19,7 @@ USE `weatherdata`;
 
 -- Dumping structure for table weatherdata.forecasts
 CREATE TABLE IF NOT EXISTS `forecasts` (
-  `tsloc` varchar(256) NOT NULL,
+  `tsloc` varchar(125) NOT NULL,
   `timestamp` timestamp NULL DEFAULT NULL,
   `location` varchar(256) DEFAULT NULL,
   `GeopHeight` float DEFAULT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `forecasts` (
 
 -- Dumping structure for table weatherdata.observations
 CREATE TABLE IF NOT EXISTS `observations` (
-  `tsloc` varchar(256) NOT NULL,
+  `tsloc` varchar(125) NOT NULL,
   `timestamp` timestamp NULL DEFAULT NULL,
   `location` varchar(256) DEFAULT NULL,
   `TA_PT1H_AVG` float DEFAULT NULL,

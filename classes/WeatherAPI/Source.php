@@ -24,5 +24,9 @@ interface Source
 
     public function getObservationsForLocation($location);
 
+    function insertApiKey($apiKey, $user);
 
+    public function checkApiKey($apiKey);
+
+    public function getObservationsForLocationInTimePeriod($location, $startDate, $endDate);
 }

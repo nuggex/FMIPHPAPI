@@ -3,6 +3,8 @@
 
 namespace WeatherAPI;
 
+use Ramsey\Uuid\Uuid;
+
 class WeatherAPI
 {
 
@@ -42,7 +44,7 @@ class WeatherAPI
 
     public function getAllForecastData()
     {
-       return $this->source->getAllForecastData();
+        return $this->source->getAllForecastData();
     }
 
     public function getAllObservationData()
@@ -282,5 +284,59 @@ class WeatherAPI
             }
         }
         return json_encode($latestWeather);
+    }
+
+    private function createApiKey(): string
+    {
+        $guid = Uuid::uuid4();
+        $uuid = Uuid::fromString($guid->toString());
+        return bin2hex($uuid->getBytes());
+    }
+
+    function insertApiKey($apiKey, $user)
+    {
+        return $this->source->insertApiKey($apiKey, $user);
+    }
+
+    public function createApiKeyForUser($user)
+    {
+        $apiKey = $this->createApiKey();
+        if ($this->insertApiKey($apiKey, $user)) {
+            return $apiKey;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkApiKey($apiKey)
+    {
+        return $this->source->checkApiKey($apiKey);
+    }
+
+    public function getObservationsForLocationInTimePeriod($location, $startDate, $endDate)
+    {
+        return $this->source->getObservationsForLocationInTimePeriod($location, $startDate, $endDate);
+    }
+
+
+    public function getAverageObservedTemperatureForLocation($location, $start = 0, $end = "2099-12-31", $interval = 0)
+    {
+        $data = $this->getObservationsForLocationInTimePeriod($location, $start, $end);
+        $averages = $this->getAveragesForValues($data, $interval);
+        $averages['location'] = $location;
+        $averages['from'] = DATE($start);
+        $averages['to'] = DATE($end);
+        return json_encode($averages, JSON_PRETTY_PRINT);
+    }
+
+    function getAveragesForValues($data): array
+    {
+        $result = [];
+        foreach (array_keys($data[0]) as $key) {
+            if ($key != "location" && $key != "tsloc" && $key != "timestamp" && $key != "updated") {
+                $result[$key] = round(array_sum($tmp = array_column($data, $key)) / count($tmp), 3);
+            }
+        }
+        return $result;
     }
 }

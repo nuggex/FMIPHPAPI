@@ -159,4 +159,35 @@ class PDOSource implements Source
         return $s->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function insertApiKey($apiKey, $user): int
+    {
+
+        $s = $this->pdo->prepare("INSERT INTO users (apiKey, mellonUser) VALUES (:apiKey, :mellonUser)");
+        $s->execute(array(
+            ":apiKey" => $apiKey,
+            ":mellonUser" => $user
+        ));
+        return $s->rowCount();
+    }
+
+    public function checkApiKey($apiKey): int
+    {
+        $s = $this->pdo->prepare("SELECT * FROM users WHERE apiKey=:apiKey");
+        $s->execute(array(
+            ":apiKey" => $apiKey
+        ));
+        return $s->rowCount();
+    }
+
+    public function getObservationsForLocationInTimePeriod($location, $startDate, $endDate)
+    {
+        $s = $this->pdo->prepare("SELECT * FROM observations WHERE location=:location AND DATE(timestamp) <=:endDate AND DATE(timestamp)>=:startDate");
+        $s->execute(array(
+            ":location" => $location,
+            ":endDate" => $endDate,
+            ":startDate" => $startDate
+        ));
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 }

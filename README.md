@@ -8,11 +8,14 @@ Can be expanded on other FMI Endpoints and made more dynamic.
 
 * PHP >7.3 
 * MariaDB >10
+* Ramsey UUID >4.2
 
 
 ## Setup
 * Create a database according to docs/weatherdata.sql
 * Change weather.ini to match your database configuration
+* In weather.ini you can enable APIKEY only access
+* In weather.ini you can enable passthrough read access for polling FMI Directly without DB writes access
 * Create logfile weather.log in /log
 * Change $desiredlocation to your desiredlocation
 * run "php FetchFMIWeather.php" to check this actually works
@@ -27,13 +30,13 @@ Can be expanded on other FMI Endpoints and made more dynamic.
 ## Endpoints
 
 * webroot/api.php?endpointName&param
-* All endpoints returns data in json encoded format unless otherwise specified
+* All endpoints return data in json encoded format unless otherwise specified
 
 ### savedForecastLocations
 Returns all in database present forecast locations
 
 ### savedObservationLocations
-Returns all in database prsesent observation locations
+Returns all in database present observation locations
 
 ### getAllObservations
 Returns ALL saved observations 
@@ -65,7 +68,7 @@ Returns all Forecast data for location from database
 Returns all observations for location from database
 
 ## NOTE
-Locations in Observartions and Forecasts are NOT the same unless you make them so. 
+Locations in Observations and Forecasts are NOT the same unless you make them so. 
 
 Forecasts are dynamically calculated locations while observations are weather station locations.
 
@@ -73,7 +76,7 @@ Forecasts are dynamically calculated locations while observations are weather st
 * Forecast location format: District
 
 
-This can cause some headache when crossmatching.
+This can cause some headache when cross matching.
 
 
 Documentation in progress. 

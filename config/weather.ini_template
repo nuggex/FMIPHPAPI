@@ -3,12 +3,20 @@
 [application]
 
 ; Output warning and errors directly to browser
-
 devmode = off
 
 ; Log is written to this file
 logfile = "/log/weather.log"
 
+; Use API Key for limiting access
+apikey = off
+
+; Allow unauthorized pass-through read access from FMI
+; No DB Access
+passthrough = off
+
+; Log everything to database
+logall = off
 
 ; Connect to database
 db.username = ""

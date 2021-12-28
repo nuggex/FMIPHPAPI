@@ -20,7 +20,7 @@ USE `weatherdata`;
 -- Dumping structure for table weatherdata.forecastLocations
 CREATE TABLE IF NOT EXISTS `forecastLocations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(125) NOT NULL DEFAULT '',
   `enabled` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `location` (`name`) USING BTREE
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `forecasts` (
 -- Dumping structure for table weatherdata.observationLocations
 CREATE TABLE IF NOT EXISTS `observationLocations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(125) NOT NULL,
   `enabled` int(11) DEFAULT 0,
   `x` float DEFAULT 0,
   `y` float DEFAULT 0,

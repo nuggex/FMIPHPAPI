@@ -28,5 +28,11 @@ interface Source
 
     public function checkApiKey($apiKey);
 
+    public function getEnabledWeatherStations();
+
     public function getObservationsForLocationInTimePeriod($location, $startDate, $endDate);
+
+    public function insertWeatherStation($station);
+
+    public function getEnabledForecastLocations();
 }

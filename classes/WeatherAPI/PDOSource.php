@@ -190,4 +190,34 @@ class PDOSource implements Source
         return $s->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+
+    public function insertWeatherStation($station)
+    {
+        $s = $this->pdo->prepare("INSERT INTO observationLocations (name, x, y, started, fmisid, `groups`, description) VALUES (:name, :x, :y, :started, :fmisid, :groups, :description) ");
+        $s->execute(array(
+            ":name" => $station['name'],
+            ":x" => $station['x'],
+            ":y" => $station['y'],
+            ":fmisid" => $station['fmisid'],
+            ":started" => $station['started'],
+            ":groups" => $station['groups'],
+            ":description" => $station['description'] ?? null
+        ));
+        return $s->rowCount();
+    }
+
+    public function getEnabledWeatherStations()
+    {
+        $s = $this->pdo->prepare("SELECT * FROM observationLocations WHERE enabled=1");
+        $s->execute();
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getEnabledForecastLocations()
+    {
+        $s = $this->pdo->prepare("SELECT * FROM forecastLocations WHERE enabled=1");
+        $s->execute();
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 }

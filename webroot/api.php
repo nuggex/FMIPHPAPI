@@ -26,6 +26,11 @@ if ($config['devmode']) {
 }
 
 
+/*
+ * Create an instance of WeatherAPI and Logger
+ *
+ */
+
 $weather = new WeatherAPI(new PDOSource($config));
 $logger = new Logger(ROOT_DIR . $config['logfile']);
 
@@ -44,11 +49,6 @@ if ($config['apikey']) {
     }
 }
 
-
-/*
- * Create an instance of WeatherAPI and Logger
- *
- */
 
 if ($authed || $passthrough) {
     if ($authed) {

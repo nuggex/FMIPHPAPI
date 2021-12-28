@@ -57,5 +57,3 @@ function getTemperatureFromWeatherForLocation($weatherData)
 }
 
 
-$test = $weather->getAverageObservedTemperatureForLocation("Helsinki Kumpula");
-var_dump($test);

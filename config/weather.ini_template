@@ -15,7 +15,7 @@ apikey = off
 ; No DB Access
 passthrough = off
 
-; Log everything to database
+; Log everything to database, not yet implemented
 logall = off
 
 ; Connect to database

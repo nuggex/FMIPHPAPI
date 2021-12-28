@@ -82,6 +82,21 @@ class WeatherAPI
         return $rowcount;
     }
 
+    public function insertWeatherStation($station)
+    {
+        return $this->source->insertWeatherStation($station);
+    }
+
+    public function getEnabledWeatherStations()
+    {
+        return $this->source->getEnabledWeatherStations();
+    }
+
+    public function getEnabledForecastLocations()
+    {
+        return $this->source->getEnabledForecastLocations();
+    }
+
 
     /*
      * Parse the FMI XML with simplexml and xpath to create a multi level array which we can insert into our database.
@@ -92,9 +107,8 @@ class WeatherAPI
 
     public function parseWeatherData($data): array
     {
-
         $xml = simplexml_load_string($data);
-        $gmlDoubleOrNil = (string)$xml->xpath("//gml:doubleOrNilReasonTupleList")[0];
+        $gmlDoubleOrNil = $xml->xpath("//gml:doubleOrNilReasonTupleList")[0];
         $labels = $xml->xpath("//swe:DataRecord/swe:field");
         //$timestamp = (string)$xml->xpath("//wfs:FeatureCollection")[0]['timeStamp'];
         $location = (string)$xml->xpath("//gml:name")[0];
@@ -126,7 +140,7 @@ class WeatherAPI
             $weatherData[$wdkey]["timeStamp"] = $timestamps[$wdkey][2];
             $weatherData[$wdkey]['location'] = $location;
             foreach ($labelsText as $labelkey => $value) {
-                $weatherData[$wdkey][$value] = $wd[$labelkey];
+                $weatherData[$wdkey][$value] = $wd[$labelkey] === "NaN" ? 0 : $wd[$labelkey];
             }
         }
         return $weatherData;
@@ -170,6 +184,18 @@ class WeatherAPI
         $output = curl_exec($curl);
         curl_close($curl);
 
+        return $output;
+    }
+
+    public function fetchWeatherByFMISID($fmisid = 101004)
+    {
+        $url = "http://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::observations::weather::hourly::multipointcoverage&fmisid=";
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url . $fmisid);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
         return $output;
     }
 
@@ -327,6 +353,11 @@ class WeatherAPI
         $averages['from'] = DATE($start);
         $averages['to'] = DATE($end);
         return json_encode($averages, JSON_PRETTY_PRINT);
+    }
+
+    function splitDataIntoIntervals($data, $interval)
+    {
+
     }
 
     function getAveragesForValues($data): array

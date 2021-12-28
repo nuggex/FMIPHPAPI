@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
--- Host:                         yourhost
--- Server version:               tbd
+-- Host:                         hood.arcada.fi
+-- Server version:               10.3.31-MariaDB-0+deb10u1 - Debian 10
 -- Server OS:                    debian-linux-gnu
 -- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
@@ -17,11 +17,22 @@
 CREATE DATABASE IF NOT EXISTS `weatherdata` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `weatherdata`;
 
+-- Dumping structure for table weatherdata.forecastLocations
+CREATE TABLE IF NOT EXISTS `forecastLocations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `enabled` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `location` (`name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table weatherdata.forecasts
 CREATE TABLE IF NOT EXISTS `forecasts` (
   `tsloc` varchar(125) NOT NULL,
   `timestamp` timestamp NULL DEFAULT NULL,
-  `location` varchar(256) DEFAULT NULL,
+  `location` varchar(125) DEFAULT NULL,
   `GeopHeight` float DEFAULT NULL,
   `Temperature` float DEFAULT NULL,
   `Pressure` float DEFAULT NULL,
@@ -54,11 +65,28 @@ CREATE TABLE IF NOT EXISTS `forecasts` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table weatherdata.observationLocations
+CREATE TABLE IF NOT EXISTS `observationLocations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `enabled` int(11) DEFAULT 0,
+  `x` float DEFAULT 0,
+  `y` float DEFAULT 0,
+  `started` int(11) DEFAULT 0,
+  `fmisid` int(11) DEFAULT 0,
+  `groups` varchar(256) DEFAULT '0',
+  `description` varchar(1000) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `location` (`name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2095 DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table weatherdata.observations
 CREATE TABLE IF NOT EXISTS `observations` (
   `tsloc` varchar(125) NOT NULL,
   `timestamp` timestamp NULL DEFAULT NULL,
-  `location` varchar(256) DEFAULT NULL,
+  `location` varchar(125) DEFAULT NULL,
   `TA_PT1H_AVG` float DEFAULT NULL,
   `TA_PT1H_MAX` float DEFAULT NULL,
   `TA_PT1H_MIN` float DEFAULT NULL,
@@ -75,6 +103,19 @@ CREATE TABLE IF NOT EXISTS `observations` (
   PRIMARY KEY (`tsloc`) USING BTREE,
   KEY `timestamp` (`timestamp`),
   KEY `location` (`location`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table weatherdata.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `apikey` varchar(100) NOT NULL,
+  `mellonuser` varchar(100) NOT NULL,
+  `uses` int(11) DEFAULT 0,
+  `lastUsed` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `banned` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`apikey`),
+  KEY `mellonuser` (`mellonuser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.

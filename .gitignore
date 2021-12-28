@@ -1,3 +1,6 @@
 .idea/
 config/weather.ini
 log/weather.log
+vendor/
+composer.lock
+ramseytest.php

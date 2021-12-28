@@ -32,14 +32,54 @@ if ($config['devmode']) {
 $weather = new WeatherAPI(new PDOSource($config));
 $logger = new Logger(ROOT_DIR . $config['logfile']);
 
-$desiredLocation = "Kumpula,Helsinki";
+
+/**
+ * Get all enabled weatherstations
+ */
+$enabledStations = $weather->getEnabledWeatherStations();
+
+/**
+ * Loop through enabled weatherstations
+ */
+foreach ($enabledStations as $weatherStation) {
+
+    /**
+     * If the enabled station has "sää" as a group get weather for it
+     */
+    if (strpos($weatherStation['groups'], "sää") !== false) {
+        $weatherObservations = $weather->parseWeatherData($weather->fetchWeatherByFMISID($weatherStation['fmisid']));
+        $observationInsertResult = $weather->insertObservationData($weatherObservations);
+        $logger->msg("Inserted / Updated " . $observationInsertResult . " Observations for: " . $weatherStation['name'] . "\n");
+    }
+}
+
+
+/**
+ * Get all enabled forecast locations
+ *
+ * Forecast location names can be any valid district or city in Finland or recorded by FMI
+ */
+
+$forecastLocations = $weather->getEnabledForecastLocations();
+
+/*
+     * Loop throguh all enabled forecast locations and insert them accordingly
+     */
+foreach ($forecastLocations as $location) {
+
+    $weatherForecastData = $weather->parseWeatherData($weather->fetchForeCast($location['name']));
+    $forecastInserResult = $weather->insertForecastData($weatherForecastData);
+
+    $logger->msg("Inserted / Updated " . $forecastInserResult . " Forecasts\n");
+
+}
 
 
 /*
- * Get Forcast Data, parse the data and insert it
+ * Get Forecast Data, parse the data and insert it
+ * For testing purposes
  *
- *
- */
+
 $weatherForecastData = $weather->parseWeatherData($weather->fetchForeCast($desiredLocation));
 $forecastInserResult = $weather->insertForecastData($weatherForecastData);
 
@@ -51,5 +91,5 @@ $logger->msg("Inserted / Updated " . $observationInsertResult . " Observations\n
 
 
 
-
+*/
 

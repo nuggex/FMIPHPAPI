@@ -55,3 +55,5 @@ function getTemperatureFromWeatherForLocation($weatherData)
         }
     }
 }
+
+

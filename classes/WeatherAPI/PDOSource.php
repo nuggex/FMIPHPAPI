@@ -159,4 +159,65 @@ class PDOSource implements Source
         return $s->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function insertApiKey($apiKey, $user): int
+    {
+
+        $s = $this->pdo->prepare("INSERT INTO users (apiKey, mellonUser) VALUES (:apiKey, :mellonUser)");
+        $s->execute(array(
+            ":apiKey" => $apiKey,
+            ":mellonUser" => $user
+        ));
+        return $s->rowCount();
+    }
+
+    public function checkApiKey($apiKey): int
+    {
+        $s = $this->pdo->prepare("SELECT * FROM users WHERE apiKey=:apiKey");
+        $s->execute(array(
+            ":apiKey" => $apiKey
+        ));
+        return $s->rowCount();
+    }
+
+    public function getObservationsForLocationInTimePeriod($location, $startDate, $endDate)
+    {
+        $s = $this->pdo->prepare("SELECT * FROM observations WHERE location=:location AND DATE(timestamp) <=:endDate AND DATE(timestamp)>=:startDate");
+        $s->execute(array(
+            ":location" => $location,
+            ":endDate" => $endDate,
+            ":startDate" => $startDate
+        ));
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    public function insertWeatherStation($station)
+    {
+        $s = $this->pdo->prepare("INSERT INTO observationLocations (name, x, y, started, fmisid, `groups`, description) VALUES (:name, :x, :y, :started, :fmisid, :groups, :description) ");
+        $s->execute(array(
+            ":name" => $station['name'],
+            ":x" => $station['x'],
+            ":y" => $station['y'],
+            ":fmisid" => $station['fmisid'],
+            ":started" => $station['started'],
+            ":groups" => $station['groups'],
+            ":description" => $station['description'] ?? null
+        ));
+        return $s->rowCount();
+    }
+
+    public function getEnabledWeatherStations()
+    {
+        $s = $this->pdo->prepare("SELECT * FROM observationLocations WHERE enabled=1");
+        $s->execute();
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function getEnabledForecastLocations()
+    {
+        $s = $this->pdo->prepare("SELECT * FROM forecastLocations WHERE enabled=1");
+        $s->execute();
+        return $s->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
 }

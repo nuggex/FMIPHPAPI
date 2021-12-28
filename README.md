@@ -35,7 +35,7 @@ To get the automated weather fetching going you need to setup a couple things Yo
 GetWeatherStations.php in the console. After this you will have to set the "enabled" value to 1 for every weatherstation you wan't to use directly in the
 Database.
 
-For foreCast locations you only need to add rows to the database with your desired forecast locations, as before these have to be single worded location names.
+For foreCast locations you only need to add rows to the database with your desired forecast locations and set enabled to 1, as before these have to be single worded location names.
 i.e. "Kontula".
 
 After this all that is left is to add a cronjob for FetchFMIWeather and watch the data flow in.
